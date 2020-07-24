@@ -3,24 +3,29 @@ const renderTodo = () => {
 }
 
 const renderTodoView = (obj) => {
-    console.log(obj)
-    const ul = document.createElement("ul")
-    const p = document.createElement("p")
+    const elementsOutSide = ["ul", "p"]
+    const elementsInSide = ["li", "input", "span", "button"]
+
+     // CREATE THE ELEMENTS
+     const html = arr => arr.map(element => document.createElement(element)) 
+
+     // SETTING THE ATTRIBUTES INTO THE ELEMENTS
+    const att = (element, name, value) => element.setAttribute(name, value)
+
+    const [ul, p] = html(elementsOutSide)
+
     const paragraphText = document.createTextNode("Nothing to do! Add a task?")
     p.appendChild(paragraphText)
 
     obj.forEach(list => {
-        const li = document.createElement("li")
-        const input = document.createElement("input")
-        const span = document.createElement("span")
-        const button = document.createElement("button")
+        const [li, input, span, button] = html(elementsInSide)
 
         const spanText = document.createTextNode(list.description)
         const buttonText = document.createTextNode("Delete")
 
-        input.setAttribute("type", "checkbox")
-        span.setAttribute("class", "editable")
-        button.setAttribute("class", "delete")
+        att(input, "type", "checkbox")
+        att(span, "class", "editable")
+        att(button, "class", "delete")
 
         button.appendChild(buttonText)
         span.appendChild(spanText)

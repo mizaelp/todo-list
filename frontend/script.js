@@ -9,12 +9,15 @@ const initialStateModel = () => {
 }
 
 const initialStateView = () => {
+    const elements = ["h1", "div", "form", "input", "button"]
+    
     // CREATE THE ELEMENTS
-    const h1 = document.createElement("h1")
-    const div = document.createElement("div")
-    const form = document.createElement("form")
-    const input = document.createElement("input")
-    const button = document.createElement("button")
+    const html = arr => arr.map(element => document.createElement(element)) 
+
+    // SETTING THE ATTRIBUTES INTO THE ELEMENTS
+    const att = (element, name, value) => element.setAttribute(name, value)
+
+    const [h1, div, form, input, button] = html(elements)
 
     // CREATE THE TEXT-NODE OF THE ELEMENTS
     const h1Text = document.createTextNode("To Do List")
@@ -24,13 +27,12 @@ const initialStateView = () => {
     h1.appendChild(h1Text)
     button.appendChild(buttonText)
 
-    // SETTING THE ATTRIBUTES INTO THE ELEMENTS
-    div.setAttribute("id", "entry-point")
-    input.setAttribute("type", "text")
-    input.setAttribute("placeholder", "Add ToDo")
-    input.setAttribute("name", "todo")
-    input.setAttribute("id", "input-add-todo")
-    button.setAttribute("id", "btn-add-todo")
+    att(div, "id", "entry-point")
+    att(input, "type", "text")
+    att(input, "placeholder", "Add ToDo")
+    att(input, "name", "todo")
+    att(input, "id", "input-add-todo")
+    att(button, "id", "btn-add-todo")
 
     // APPENDING THE CHILDREN ELEMENTS INTO THE PARENT ELEMENTS
     form.appendChild(input)
