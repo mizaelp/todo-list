@@ -1,8 +1,13 @@
+import deleteTodo from '../delete_todo/index.js'
+import updateStatus from '../update_status_list/index.js'
+import modalUpdate from '../modal/index.js'
+
 const renderTodo = () => {
     renderTodoPresenter()
 }
 
 const renderTodoView = (obj) => {
+    console.log(obj)
     const elementsOutSide = ["ul", "p"]
     const elementsInSide = ["li", "input", "span", "button"]
 
@@ -26,6 +31,8 @@ const renderTodoView = (obj) => {
         att(input, "type", "checkbox")
         att(span, "class", "editable")
         att(button, "class", "delete")
+        att(button, "role", list.id)
+        att(input, "role", list.id)
 
         button.appendChild(buttonText)
         span.appendChild(spanText)
@@ -36,7 +43,7 @@ const renderTodoView = (obj) => {
 
         if (list.status === 1) {
             input.setAttribute("checked", true)
-            input.nextElementSibling.classList.add("sublinado")
+            input.nextElementSibling.classList.add("line_through")
         }
     })
 
@@ -56,27 +63,39 @@ const renderTodoPresenter = async () => {
     const view = renderTodoView(model)
 
     //! VERIFICAR UMA MELHOR SOLUÇÃO
+    // APAGA TO OS FILHOS DA DIV ANTES DE RENDERIZAR NOVAMENTE.
     document.querySelector("div#entry-point").innerHTML = ""
 
     view.forEach(element => {
         document.querySelector("div#entry-point").appendChild(element)
     })
 
-    const finObj = text => model.find(element => element.description === text)
-    const findObjByid = id => model.find(element => element.id === id)
+    // DELETE TODO
+    const button = document.querySelectorAll("button.delete")
+    button.forEach(element => {
+        element.addEventListener("click", ({ target }) => {
+            const id = target.getAttribute("role")
+            deleteTodo(id)
+        })
+    })
 
-    const input = document.querySelectorAll("input[type=checkbox")
+    // UPDATE STATUS
+    const input = document.querySelectorAll("input[type=checkbox]")
     input.forEach(element => {
-        element.addEventListener("change", () => {
-            element.nextElementSibling.classList.toggle("sublinado")
-            const answers = finObj(element.nextElementSibling.textContent)
+        element.addEventListener("click", ({ target }) => {
+            const id = target.getAttribute("role")
+            const status = element.checked === false ? false : true
+            const answers = { id, status }
+            updateStatus(answers)
+        })
+    })
 
-            // if (element.checked) {
-            //     answers.status = true
-            // } else {
-            //     answers.status = false
-            // }
-            //! CHAMAR FUNÇÃO QUE ATUALIZA O TODO
+    // UPDATE DESCRIPTION
+    const span = document.querySelectorAll("span.editable")
+    span.forEach(element => {
+        element.addEventListener("click", ({ target }) => {
+            const text = target.textContent
+            modalUpdate(text)
         })
     })
 }
