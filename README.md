@@ -1,2 +1,4 @@
 # ToDo-List
-## Tecnologies: node and sqlite
+## DataBase: SQLite
+## Backend: NodeJs
+## FrontEnd: JavaScript
